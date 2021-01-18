@@ -28,9 +28,7 @@ const resolvers = {
 			const {email, password} = input;
 
 			const existeUsuario = await Usuario.findOne({email});
-			if (existeUsuario) {
-				throw new Error('El usuario ya esta registrado');
-			}
+			if (existeUsuario) throw new Error('El usuario ya esta registrado');
 
 			try {
 				//Hashear password
@@ -49,9 +47,7 @@ const resolvers = {
 			const {email, password} = input;
 			//Existe el usuario
 			const existeUsuario = await Usuario.findOne({email});
-			if (!existeUsuario) {
-				throw new Error('El usuario no existe');
-			}
+			if (!existeUsuario) throw new Error('El usuario no existe');
 
 			const passwordCorrecto = await bcryptjs.compare(password, existeUsuario.password);
 
@@ -62,7 +58,6 @@ const resolvers = {
 		},
 
 		nuevoProyecto: async (_, {input}, ctx) => {
-			console.log('Creando Proyecto', ctx);
 			try {
 				const proyecto = new Proyecto(input);
 				proyecto.creador = ctx.usuario.id;
